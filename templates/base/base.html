@@ -1,0 +1,54 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+
+<style>
+    .small {
+        font-size: 0.875rem;
+        color: #4b4b4b;
+    }
+</style>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.js"
+        integrity="sha512-n/4gHW3atM3QqRcbCn6ewmpxcLAHGaDjpEBu4xZd47N0W2oQ+6q7oc3PXstrJYXcbNU1OHdQ1T7pAP+gi5Yu8g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.tiny.cloud/1/ejfej7wzcg1hib8eew1onmh8d577qbpz8zcxwbb9ldzpk69m/tinymce/5/tinymce.min.js"
+        referrerpolicy="origin"></script>
+   
+    {% include 'includes/csslinks.html' %}
+    <title>
+        {% block title %}
+        {% endblock title %}
+    </title>
+
+
+    <title>NueBlog</title>
+</head>
+
+<body>
+
+
+    {% if request.get_full_path == '/account/password_reset/done/' %}
+    {% else %}
+    {% include 'includes/navbar.html' %}
+    {% endif %}
+
+    {% block content %}
+
+
+    {% endblock content %}
+
+
+
+    <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+    </script> -->
+    {% include 'includes/scripts.html' %}
+
+</body>
+
+</html>

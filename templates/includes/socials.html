@@ -1,0 +1,28 @@
+{% load social_share %}
+
+
+<div class="socials mb-5">
+    <div class="socials-inner flexed">
+        <Small class="flexed">Share this post:
+            <div class="facebook-this" data-toggle="tooltip" data-placement="bottom" title="Facebook">
+                {% post_to_facebook object_or_url "<i class='fab fa-facebook-f'></i>" %}
+            </div>
+            <div class="" data-toggle="tooltip" data-placement="bottom" title="Twitter">
+                {% post_to_twitter "Check out this post by {{ post.author }}, called {{ post.title }}" object_or_url "<i class='fab fa-twitter' ></i>" %}
+            </div>
+            <div class="" data-toggle="tooltip" data-placement="bottom" title="Pinterest">
+                <a style="cursor: pointer;" class="pinterest-this " target="_blank">
+                    <span class="PIN_1626091531472_button_pin PIN_1626091531472_save"
+                        data-pin-log="button_pinit_bookmarklet"><i class="fab fa-pinterest"></i></span>
+                </a>
+            </div>
+            <div class="" data-toggle="tooltip" data-placement="bottom" title="Reddit">
+                {% post_to_reddit "Check out this post by {{ post.author }}, called {{ post.title }}" object_or_url "<i class='fab fa-reddit'></i>" %}
+            </div>
+            <div class="" data-toggle="tooltip" data-placement="bottom" title="Whatsapp">
+                {% post_to_whatsapp  object_or_url "<i class='fab fa-whatsapp'></i>" %}
+            </div>
+        </Small>
+    </div>
+</div>
+{% add_pinterest_script %}

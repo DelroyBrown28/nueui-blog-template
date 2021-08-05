@@ -1,0 +1,139 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load social_share %}
+
+
+{% block title %}
+Nue Blog
+{% endblock title %}
+
+{% block content %}
+
+
+<!-- FEATURED SECTION -- Jumbotron -->
+<div class="container" style="margin-top: 50px;">
+    <div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            {% for ci in carousel_imgs|slice:":5"  %}
+            {% if forloop.first %}
+            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"
+                aria-current="true" aria-label="Slide {{ forloop.counter }}">
+            </button>
+            {% else %}
+            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="{{forloop.counter0}}"
+                aria-label="Slide {{ forloop.counter }}">
+            </button>
+            {% endif %}
+            {% endfor %}
+        </div>
+
+        <div class="carousel-inner">
+            {% for ci in carousel_imgs|slice:":5"  %}
+            <a href="{{ci.get_absolute_url}}" class="carousel-item {% if forloop.counter == 1 %}active{% endif %}"
+                data-bs-interval="10000">
+                <img src="{{ ci.image.url }}" class="d-block w-100 carousel-image" alt="...">
+                <div class="carousel-caption-wrap">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>{{ci.title}}</h5>
+                        <p>{{ci.excerpt}}.</p>
+                        <small>By: {{ci.author}}</small>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+            <span>°</span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
+            <span>°</span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</div>
+
+<!-- CATEGORIES -->
+
+<!-- POSTS -->
+<div class="album py-5 bg-light">
+    <div class="container mb-5 bg-light col-md-12 flexed category-bar">
+        {% for category in category_list  %}
+
+        <div>
+            {{category.name|title}}
+        </div>
+        <span style="color: #48AA8B; font-size: 35px">•</span>
+        {% endfor %}
+    </div>
+    <div class="container">
+        <div class="row">
+            {% for post in posts %}
+
+            <div class="col-md-3 flexed" data-aos="fade-in" data-aos-duration="500" data-aos-easing="ease-in-out"
+                data-aos-mirror="true" data-aos-once="true" data-aos-anchor-placement="top-center">
+                <a class="text-dark" href="{{post.get_absolute_url}}">
+                    <div class="card mb-5">
+                        <img class="card-img-top post-image" src="{{ post.image.url }}" alt="{{ post.title }}">
+                        <div class="card-body">
+                            <h2 class="card-title">{{post.title|truncatechars:50}}</h2>
+                            <p class="card-text" style="height: 65px;">{{post.excerpt|truncatechars:50}}</p>
+
+                        </div>
+                        <div class="post-card-bottom d-flex py-1 justify-content-between align-items-right">
+                            <small class="post-published-date">{{post.published}}</small>
+                            <small class="post-author">{{post.author}}</small>
+
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<!-- POSTS -->
+
+
+<script>
+    $(document).on('keyup', '#id_q', function (e) {
+        e.preventDefault();
+
+        var minlength = 2;
+        var results = [];
+
+        if ($('#id_q').val().length >= minlength) {
+            $.ajax({
+                type: 'POST',
+                url: '{% url "blog:post_search" %}',
+                data: {
+                    ss: $('#id_q').val(),
+                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                    action: 'post'
+                },
+                success: function (json) {
+
+                    $.each(JSON.parse(json.search_string), function (i, item) {
+
+                        results.push('<li class="my-2 pl-2"><a href="/' + item
+                            .fields.slug +
+                            '">' + item.fields.title +
+                            '</a></li>')
+                    })
+
+                    if (!$(".show")[0]) {
+                        $('.menudd').trigger('click')
+                    }
+
+                    document.getElementById("list").innerHTML = (!results.length) ?
+                        "No results match your query" : results.join('');
+                },
+                error: function (xhr, errmsg, err) {}
+            });
+        }
+    })
+</script>
+
+
+{% endblock content %}

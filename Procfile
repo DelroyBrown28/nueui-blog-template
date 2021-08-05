@@ -1,0 +1,1 @@
+web: gunicorn NueBlog.wsgi --log-file -

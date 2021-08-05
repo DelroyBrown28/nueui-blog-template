@@ -1,0 +1,69 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% block title %}Users Favorites{% endblock %}
+{% block content %}
+<div class="container">
+    <!-- <section class="jumbotron text-center bg-white">
+        <div class="container">
+            <h1>Here are your saved posts</h1>
+            <p class="lead text-muted">Here you can remove or view the favorites posts you have added</p>
+        </div>
+    </section> -->
+
+
+    <section class="jumbotron text-center bg-white">
+        <div class="container">
+            <h1 class="display-4 mb-4">
+                <img class="img-fluid jumbotron-logo" src="{% static 'images/nueuibloglogo.png' %}">
+            </h1>
+            <h1 style="font-weight: 300;">YOUR SAVED POSTS</h1>
+            <!-- <p class="lead text-muted">Here you can remove or view the favorites posts you have added -->
+            </p>
+            <p>
+                <a href="{% url 'accounts:profile' %}" class="btn btn-primary my-2">Back To Profile</a>
+            </p>
+        </div>
+    </section>
+
+
+
+
+    <div>
+        <div class="row">
+            {% for post in new %}
+            <div class="col-md-3 flexed">
+                <a class="text-dark" href="{{post.get_absolute_url}}">
+                    <div class="card mb-5">
+                        <div class="remove-section">
+                            <a href="{% url 'accounts:favorites_add' post.id %}"
+                                class="remove-post-button" data-bs-toggle="tooltip" data-bs-placement="top" title="Remove post?">
+                                <i class="fas fa-times-circle mr-2"></i>
+                            </a>
+                        </div>
+                        <img class="card-img-top post-image" src="{{ post.image.url }}" alt="{{ post.title }}">
+                        <div class="card-body">
+                            <h2 class="card-title">{{post.title|truncatechars:50}}</h2>
+                            <p class="card-text" style="height: 65px;">{{post.excerpt|truncatechars:50}}</p>
+
+                        </div>
+                        <a class="saved-post-view-btn" href="{{post.get_absolute_url}}">view</a>
+                        <div class="d-flex py-1 justify-content-between align-items-right">
+                            <small class="post-published-date">{{post.published}}</small>
+                            <small class="post-author">{{post.author}}</small>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+
+
+
+
+
+
+
+        </div>
+    </div>
+</div>
+{% include "includes/footer.html" %}
+{% endblock %}

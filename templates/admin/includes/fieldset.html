@@ -1,0 +1,50 @@
+<head>
+    <script src="https://cdn.tiny.cloud/1/ejfej7wzcg1hib8eew1onmh8d577qbpz8zcxwbb9ldzpk69m/tinymce/5/tinymce.min.js"
+        referrerpolicy="origin"></script>
+    <script>
+        tinymce.init({
+            selector: '#id_content',
+            plugins: 'link',
+            toolbar: 'bold italic | undo redo | link image | fontsizeselect',
+            fontsize_formats: '8pt 10pt 12pt 14pt 16pt 18pt 24pt 36pt 48pt',
+            height: '400',
+            plugin: 'a_tinymce_plugin',
+            a_plugin_option: true,
+            a_configuration_option: 400,
+        });
+    </script>
+</head>
+
+{% load jet_tags %}
+<fieldset class="module aligned {{ fieldset.classes }}">
+    {% if fieldset.name %}<h2>{{ fieldset.name }}</h2>{% endif %}
+    {% if fieldset.description %}
+    <div class="description">{{ fieldset.description|safe }}</div>
+    {% endif %}
+    {% for line in fieldset %}
+    <div
+        class="form-row{% if line.fields|length_is:'1' and line.errors %} errors{% endif %}{% if line.has_visible_field == False %} hidden{% endif %}{% for field in line %}{% if field.field.name %} field-{{ field.field.name }}{% endif %}{% endfor %}">
+        {% if line.fields|length_is:'1' %}{{ line.errors }}{% endif %}
+        {% for field in line %}
+        <div{% if not line.fields|length_is:'1' %}
+            class="field-box{% if field.field.name %} field-{{ field.field.name }}{% endif %}{% if not field.is_readonly and field.errors %} errors{% endif %}{% if field.field.is_hidden %} hidden{% endif %}"
+            {% elif field.is_checkbox %} class="checkbox-row" {% endif %}>
+            {% if not line.fields|length_is:'1' and not field.is_readonly %}{{ field.errors }}{% endif %}
+            {% if field.is_checkbox %}
+            {{ field.field }}{{ field.label_tag }}
+            {% else %}
+            {{ field.label_tag }}
+            {% if field.is_readonly %}
+            <p>{{ field.contents }}</p>
+            {% else %}
+            {{ field.field|jet_select2_lookups }}
+            {% endif %}
+            {% endif %}
+            {% if field.field.help_text %}
+            <p class="help">{{ field.field.help_text|safe }}</p>
+            {% endif %}
+    </div>
+    {% endfor %}
+    </div>
+    {% endfor %}
+</fieldset>
